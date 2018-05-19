@@ -105,6 +105,30 @@ func TestFibSeqHandler_NegativeParamater(t *testing.T) {
 	}
 }
 
+// Verify that non-integer index returns an error
+func TestFibSeqHandler_NonIntegerParamater(t *testing.T) {
+
+	req, err := http.NewRequest("GET", "/fibseq?index=one", nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	rr := httptest.NewRecorder()
+	handler := http.HandlerFunc(FibSeq)
+	handler.ServeHTTP(rr, req)
+
+	if status := rr.Code; status != http.StatusBadRequest {
+		t.Errorf("Status handler returned wrong status code: got %v want %v",
+			status, http.StatusBadRequest)
+	}
+
+	expected := `{"httpstatus":400,"sequence":null,"errormsg":"Invalid value sent for index : one"}` + "\n"
+	if rr.Body.String() != expected {
+		t.Errorf("handler returned unexpected body: got >%v< want >%v<",
+			rr.Body.String(), expected)
+	}
+}
+
 // Validate get a valid sequence, when index is set to 5
 func TestFibSeqHandler_ValidParamater(t *testing.T) {
 

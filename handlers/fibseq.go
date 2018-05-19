@@ -41,7 +41,7 @@ func FibSeq(w http.ResponseWriter, r *http.Request) {
 	// Is the value for the index parameter and integer, if not it is a bad request.
 	val, err := strconv.Atoi(queryValues.Get("index"))
 	if err != nil {
-		sendResult(w, http.StatusBadRequest, nil, fmt.Sprintf("Invalid value sent for index : %v", val))
+		sendResult(w, http.StatusBadRequest, nil, fmt.Sprintf("Invalid value sent for index : %v", queryValues.Get("index")))
 		return
 	}
 
