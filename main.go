@@ -12,6 +12,7 @@ func main() {
 
 	router := mux.NewRouter().StrictSlash(true)
 	router.HandleFunc("/status", handlers.Status)
+	router.HandleFunc("/fibseq", handlers.FibSeq)
 
 	log.Fatal(http.ListenAndServeTLS(":8443", "./config/server.crt", "./config/server.key", router))
 
