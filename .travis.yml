@@ -3,6 +3,9 @@ language: go
 go:
   - 1.10.x
 
+install:
+- go get github.com/kardianos/govendor
+
 script: go test -v ./...
 
 after_success:
