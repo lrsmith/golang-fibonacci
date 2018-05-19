@@ -1,0 +1,25 @@
+{
+	"comment": "",
+	"ignore": "test",
+	"package": [
+		{
+			"checksumSHA1": "g/V4qrXjUGG9B+e3hB+4NAYJ5Gs=",
+			"path": "github.com/gorilla/context",
+			"revision": "08b5f424b9271eedf6f9f0ce86cb9396ed337a42",
+			"revisionTime": "2016-08-17T18:46:32Z"
+		},
+		{
+			"checksumSHA1": "TyrXOBHvvLtawmxfdjrju452928=",
+			"path": "github.com/gorilla/mux",
+			"revision": "c85619274f5d55a67491010f883a91f568b3a9b0",
+			"revisionTime": "2018-05-17T17:36:23Z"
+		},
+		{
+			"checksumSHA1": "2Cs00lF05dakzkHHkYWuedCf6nY=",
+			"path": "github.com/tkanos/gonfig",
+			"revision": "140e7c7ecea9170d71a841e208b86685c845eb53",
+			"revisionTime": "2018-03-27T13:18:05Z"
+		}
+	],
+	"rootPath": "github.com/lrsmith/golang-fibonacci"
+}
