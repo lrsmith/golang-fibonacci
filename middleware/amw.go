@@ -12,11 +12,12 @@ import (
 	"net/http"
 )
 
+// AuthenticationMiddleware - Struct for holding user authentication information
 type AuthenticationMiddleware struct {
 	TokenUsers map[string]string
 }
 
-// Initialize it somewhere
+// Populate - Populate the authentication map
 func (amw *AuthenticationMiddleware) Populate() {
 
 	amw.TokenUsers = make(map[string]string)
@@ -25,8 +26,8 @@ func (amw *AuthenticationMiddleware) Populate() {
 	amw.TokenUsers["aaaaaaaa"] = "ford"
 }
 
-// Middleware function, which will be called for each request
-func (amw *AuthenticationMiddleware) Middleware(next http.Handler) http.Handler {
+// AuthenticationMiddleware function, which will be called for each request
+func (amw *AuthenticationMiddleware) AuthenticationMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		token := r.Header.Get("X-Session-Token")
 
@@ -35,7 +36,7 @@ func (amw *AuthenticationMiddleware) Middleware(next http.Handler) http.Handler 
 			log.Printf("Authenticated user %s\n", user)
 			next.ServeHTTP(w, r)
 		} else {
-			http.Error(w, "Forbidden", 403)
+			http.Error(w, "{\"httpstatus\":403,\"errmsg\":\"Authentication Failure.\"}", 403)
 		}
 	})
 }

@@ -21,7 +21,7 @@ func sendResult(w http.ResponseWriter, httpstatus int, sequence []uint64, errorm
 
 }
 
-// FibSeq ...
+// FibSeq - Calculate the fibonacci sequence out to 'index' numbers
 func FibSeq(w http.ResponseWriter, r *http.Request) {
 
 	var i int
