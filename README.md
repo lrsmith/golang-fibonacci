@@ -41,6 +41,8 @@ Lens-MacBook-Pro:Terraform lrsmith$ curl --insecure -H 'X-Session-Token:00000000
 * Make package for generic return message handling.
 * Research improving logging, such as source IP, etc.
 * Put Load-balancer in front of ECS containers, so can run more than one. Do canary deployments, etc.
+* Extend getConfigs to also look for env variables, so can config docke via ENV at runtime, rather then pass in hard-coded configs.
+* Add tests for middleware
 
 # ChangeLog
 
