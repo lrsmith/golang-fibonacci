@@ -8,12 +8,12 @@ import (
 )
 
 type fibSeqResult struct {
-	HTTPStatus int    `json:"httpstatus"`
-	Sequence   []int  `json:"sequence"`
-	ErrorMsg   string `json:"errormsg"`
+	HTTPStatus int      `json:"httpstatus"`
+	Sequence   []uint64 `json:"sequence"`
+	ErrorMsg   string   `json:"errormsg"`
 }
 
-func sendResult(w http.ResponseWriter, httpstatus int, sequence []int, errormsg string) {
+func sendResult(w http.ResponseWriter, httpstatus int, sequence []uint64, errormsg string) {
 
 	results := fibSeqResult{httpstatus, sequence, errormsg}
 	w.WriteHeader(results.HTTPStatus)
@@ -23,6 +23,8 @@ func sendResult(w http.ResponseWriter, httpstatus int, sequence []int, errormsg 
 
 // FibSeq ...
 func FibSeq(w http.ResponseWriter, r *http.Request) {
+
+	var i int
 
 	queryValues := r.URL.Query()
 
@@ -45,13 +47,11 @@ func FibSeq(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var i int
-
 	// Account for starting at 1, not 0
 	val = val - 1
 
 	if val >= -1 {
-		f := make([]int, val+1)
+		f := make([]uint64, val+1)
 
 		// Iterate through and calculate fibonaci sequence
 		for i = 0; i <= val; i++ {
@@ -59,7 +59,7 @@ func FibSeq(w http.ResponseWriter, r *http.Request) {
 			switch i {
 			// First two numbers can't be calculated, so set them.
 			case 0, 1:
-				f[i] = i
+				f[i] = uint64(i)
 			// Calculate the remaining numbers in the sequence
 			default:
 				f[i] = f[i-1] + f[i-2]

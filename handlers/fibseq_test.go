@@ -9,7 +9,7 @@ import (
 // Verify that no parameters returns an error
 func TestFibSeqHandler_NoParameters(t *testing.T) {
 
-	req, err := http.NewRequest("GET", "/fibseq", nil)
+	req, err := http.NewRequest("GET", "/v1/fibseq", nil)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -34,7 +34,7 @@ func TestFibSeqHandler_NoParameters(t *testing.T) {
 // Verify that multiple parameters returns an error
 func TestFibSeqHandler_MultipleParamaters(t *testing.T) {
 
-	req, err := http.NewRequest("GET", "/fibseq?index=5&foo=bar", nil)
+	req, err := http.NewRequest("GET", "/v1/fibseq?index=5&foo=bar", nil)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -59,7 +59,7 @@ func TestFibSeqHandler_MultipleParamaters(t *testing.T) {
 // Verify that invalid parameters returns an error
 func TestFibSeqHandler_InvalidParamater(t *testing.T) {
 
-	req, err := http.NewRequest("GET", "/fibseq?foo=bar", nil)
+	req, err := http.NewRequest("GET", "/v1/fibseq?foo=bar", nil)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -84,7 +84,7 @@ func TestFibSeqHandler_InvalidParamater(t *testing.T) {
 // Verify that non-negative indexes returns an error
 func TestFibSeqHandler_NegativeParamater(t *testing.T) {
 
-	req, err := http.NewRequest("GET", "/fibseq?index=-5", nil)
+	req, err := http.NewRequest("GET", "/v1/fibseq?index=-5", nil)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -108,7 +108,7 @@ func TestFibSeqHandler_NegativeParamater(t *testing.T) {
 // Verify that non-integer index returns an error
 func TestFibSeqHandler_NonIntegerParamater(t *testing.T) {
 
-	req, err := http.NewRequest("GET", "/fibseq?index=one", nil)
+	req, err := http.NewRequest("GET", "/v1/fibseq?index=one", nil)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -132,7 +132,7 @@ func TestFibSeqHandler_NonIntegerParamater(t *testing.T) {
 // Validate get a valid sequence, when index is set to 5
 func TestFibSeqHandler_ValidParamater(t *testing.T) {
 
-	req, err := http.NewRequest("GET", "/fibseq?index=5", nil)
+	req, err := http.NewRequest("GET", "/v1/fibseq?index=5", nil)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -156,7 +156,7 @@ func TestFibSeqHandler_ValidParamater(t *testing.T) {
 // Zero is a valid index, return empty list
 func TestFibSeqHandler_ValidZeroIndex(t *testing.T) {
 
-	req, err := http.NewRequest("GET", "/fibseq?index=0", nil)
+	req, err := http.NewRequest("GET", "/v1/fibseq?index=0", nil)
 	if err != nil {
 		t.Fatal(err)
 	}
