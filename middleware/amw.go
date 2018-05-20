@@ -1,4 +1,4 @@
-package main
+package middleware
 
 /*
 Taken from https://github.com/gorilla/mux#middleware
@@ -12,25 +12,25 @@ import (
 	"net/http"
 )
 
-type authenticationMiddleware struct {
-	tokenUsers map[string]string
+type AuthenticationMiddleware struct {
+	TokenUsers map[string]string
 }
 
 // Initialize it somewhere
-func (amw *authenticationMiddleware) Populate() {
+func (amw *AuthenticationMiddleware) Populate() {
 
-	amw.tokenUsers = make(map[string]string)
+	amw.TokenUsers = make(map[string]string)
 
-	amw.tokenUsers["00000000"] = "zaphod"
-	amw.tokenUsers["aaaaaaaa"] = "ford"
+	amw.TokenUsers["00000000"] = "zaphod"
+	amw.TokenUsers["aaaaaaaa"] = "ford"
 }
 
 // Middleware function, which will be called for each request
-func (amw *authenticationMiddleware) Middleware(next http.Handler) http.Handler {
+func (amw *AuthenticationMiddleware) Middleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		token := r.Header.Get("X-Session-Token")
 
-		if user, found := amw.tokenUsers[token]; found {
+		if user, found := amw.TokenUsers[token]; found {
 			// We found the token in our map
 			log.Printf("Authenticated user %s\n", user)
 			next.ServeHTTP(w, r)

@@ -6,11 +6,12 @@ import (
 
 	"github.com/gorilla/mux"
 	"github.com/lrsmith/golang-fibonacci/handlers"
+	"github.com/lrsmith/golang-fibonacci/middleware"
 )
 
 func main() {
 
-	amw := authenticationMiddleware{}
+	amw := middleware.AuthenticationMiddleware{}
 	amw.Populate()
 
 	router := mux.NewRouter().StrictSlash(true)
