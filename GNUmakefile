@@ -4,8 +4,22 @@ GOFMT_FILES?=$$(find . -name '*.go' |grep -v vendor)
 default: build
 
 build: fmtcheck
-	go build -o main
+	go build -o ./build/fibonacci_rest_api
 
+# Docker 
+
+docker-build-and-push: certs
+	$(eval IMAGE_ID=$(shell sh -c "docker build -q . | awk -F':' '{print $2}'"))
+	$(eval CONTAINER_ID=$(shell sh -c "docker run -p 8443:8443 --name golang-fibonacci -dit $(IMAGE_ID)"))
+	docker commit golang-fibonacci golang-fibonacci
+	$(eval TAG=$(shell sh -c "git describe --tags"))
+	docker tag $(IMAGE_ID) $(AWS_ACCOUNT).dkr.ecr.us-east-1.amazonaws.com/golang-fibonacci:$(TAG)
+	docker push $(AWS_ACCOUNT).dkr.ecr.us-east-1.amazonaws.com/golang-fibonacci:$(TAG)
+	docker stop golang-fibonacci
+	docker rm golang-fibonacci
+
+
+# Test
 test: fmtcheck
 	go test -i $(TEST) || exit 1
 	echo $(TEST) | \
@@ -14,6 +28,7 @@ test: fmtcheck
 testacc: fmtcheck
 	TF_ACC=1 go test $(TEST) -v $(TESTARGS) -timeout 120m
 
+# Initialization
 certs:
 	if [ ! -d "config" ]; then  mkdir config; fi
 	if [ ! -f "config/server.key" ]; then  \
@@ -38,9 +53,6 @@ fmt:
 fmtcheck:
 	@sh -c "'$(CURDIR)/scripts/gofmtcheck.sh'"
 
-errcheck:
-	@sh -c "'$(CURDIR)/scripts/errcheck.sh'"
-
 vendor-status:
 	@govendor status
 
@@ -53,7 +65,7 @@ test-compile:
 	go test -c $(TEST) $(TESTARGS)
 
 clean:
-	rm main
+	rm ./build/fibonacci_rest_api
 
 .PHONY: build test testacc vet fmt fmtcheck errcheck vendor-status test-compile website website-test
 

@@ -1,0 +1,15 @@
+[
+  {
+    "name": "golang-fibonacci-1",
+    "image": "<redacted>.dkr.ecr.us-east-1.amazonaws.com/golang-fibonacci:v0.0.1-3-g8b8d20c",
+    "cpu": 10,
+    "memory": 512,
+    "essential": true,
+    "portMappings": [
+      {
+        "containerPort": 8443,
+        "hostPort": 8443
+      }
+    ]
+  }
+]
