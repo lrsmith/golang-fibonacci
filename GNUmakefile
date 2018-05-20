@@ -4,8 +4,22 @@ GOFMT_FILES?=$$(find . -name '*.go' |grep -v vendor)
 default: build
 
 build: fmtcheck
-	go build -o main
+	go build -o ./build/fibonacci_rest_api
 
+# Docker 
+docker-container: certs build
+	$(eval IMAGE_ID=$(shell sh -c "docker build -q . | awk -F':' '{print $2}'"))
+
+docker-run: docker-container
+	docker run -p 8443:8443 -dit $(IMAGE_ID)
+
+docker-commit: docker-run
+	$(eval CONTAINER_ID=$(shell sh -c "docker ps -lq"))
+	docker commit $(CONTAINER_ID) golang-fibonacci
+	docker stop $(CONTAINER_ID)
+	docker rm $(CONTAINER_ID)
+
+# Test
 test: fmtcheck
 	go test -i $(TEST) || exit 1
 	echo $(TEST) | \
@@ -14,6 +28,7 @@ test: fmtcheck
 testacc: fmtcheck
 	TF_ACC=1 go test $(TEST) -v $(TESTARGS) -timeout 120m
 
+# Initialization
 certs:
 	if [ ! -d "config" ]; then  mkdir config; fi
 	if [ ! -f "config/server.key" ]; then  \
@@ -53,7 +68,7 @@ test-compile:
 	go test -c $(TEST) $(TESTARGS)
 
 clean:
-	rm main
+	rm ./build/fibonacci_rest_api
 
 .PHONY: build test testacc vet fmt fmtcheck errcheck vendor-status test-compile website website-test
 
