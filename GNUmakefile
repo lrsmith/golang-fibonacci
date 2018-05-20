@@ -7,23 +7,17 @@ build: fmtcheck
 	go build -o ./build/fibonacci_rest_api
 
 # Docker 
-docker-container: certs build
+
+docker-build-and-push: certs
 	$(eval IMAGE_ID=$(shell sh -c "docker build -q . | awk -F':' '{print $2}'"))
-
-docker-run: docker-container
-	docker run -p 8443:8443 -dit $(IMAGE_ID)
-
-docker-commit: docker-run
-	$(eval CONTAINER_ID=$(shell sh -c "docker ps -lq"))
-	docker commit $(CONTAINER_ID) golang-fibonacci
-	docker stop $(CONTAINER_ID)
-	docker rm $(CONTAINER_ID)
-
-docker-push:
+	$(eval CONTAINER_ID=$(shell sh -c "docker run -p 8443:8443 --name golang-fibonacci -dit $(IMAGE_ID)"))
+	docker commit golang-fibonacci golang-fibonacci
 	$(eval TAG=$(shell sh -c "git describe --tags"))
-	eval $(aws ecr get-login --no-include-email)
-	docker tag b2eda9259f89 677476089258.dkr.ecr.us-east-1.amazonaws.com/golang-fibonacci:$(TAG)
-	docker push 677476089258.dkr.ecr.us-east-1.amazonaws.com/golang-fibonacci:$(TAG)
+	docker tag $(IMAGE_ID) $(AWS_ACCOUNT).dkr.ecr.us-east-1.amazonaws.com/golang-fibonacci:$(TAG)
+	docker push $(AWS_ACCOUNT).dkr.ecr.us-east-1.amazonaws.com/golang-fibonacci:$(TAG)
+	docker stop golang-fibonacci
+	docker rm golang-fibonacci
+
 
 # Test
 test: fmtcheck
@@ -58,9 +52,6 @@ fmt:
 
 fmtcheck:
 	@sh -c "'$(CURDIR)/scripts/gofmtcheck.sh'"
-
-errcheck:
-	@sh -c "'$(CURDIR)/scripts/errcheck.sh'"
 
 vendor-status:
 	@govendor status

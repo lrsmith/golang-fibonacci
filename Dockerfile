@@ -10,5 +10,3 @@ ENTRYPOINT /go/src/app/app
 HEALTHCHECK --interval=5m --timeout=3s \
   CMD curl --insecure https://localhost:8443/status || exit 1
 
-
-#CMD ["/go/src/app/app"]
