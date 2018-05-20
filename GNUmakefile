@@ -19,6 +19,12 @@ docker-commit: docker-run
 	docker stop $(CONTAINER_ID)
 	docker rm $(CONTAINER_ID)
 
+docker-push:
+	$(eval TAG=$(shell sh -c "git describe --tags"))
+	eval $(aws ecr get-login --no-include-email)
+	docker tag b2eda9259f89 677476089258.dkr.ecr.us-east-1.amazonaws.com/golang-fibonacci:$(TAG)
+	docker push 677476089258.dkr.ecr.us-east-1.amazonaws.com/golang-fibonacci:$(TAG)
+
 # Test
 test: fmtcheck
 	go test -i $(TEST) || exit 1
