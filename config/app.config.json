@@ -1,5 +1,8 @@
 {
 	"Port": 8443,
 	"SSLKey": "./config/server.key",
-	"SSLCert": "./config/server.crt"
+	"SSLCert": "./config/server.crt",
+	"StatsdEnable": true,
+  "StatsdPrefix": "golang-fibonacci",
+  "StatsdServer": "127.0.0.1:8215"
 }

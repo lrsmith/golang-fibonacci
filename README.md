@@ -4,6 +4,16 @@
 [![Go Report Card](https://goreportcard.com/badge/github.com/lrsmith/golang-fibonacci)](https://goreportcard.com/report/github.com/lrsmith/golang-fibonacci)
 
 
+# Statsd integration
+
+A statsd middleware has been implemented which will send a metric to statsd, for each URI called. The Graphite metric
+name is used and defaults to golang-fibonacci.v1.fibseq.<N>  where N is the parameter passed, to indicate the number of Fibonacci numbers to calculate.
+
+Example
+`Lens-MacBook-Pro:lrsmith$ curl --insecure -H 'X-Session-Token:00000000' "https://localhost:8443/v1/fibseq?index=8"`
+would send a metric to statsd
+`golang-fibonacci.v1.fibseq.8:1|c`
+
 # Deployments
 
  For the initial implementation and deployment, a docker container is created and deployed to an Amazon ECR cluster.
@@ -24,7 +34,7 @@ repository and ECS tasks.
 4. Update terraform with version of Container to deploy and run `terraform apply`
 5. Verify
 
-Example.
+Example
 ```
 Lens-MacBook-Pro:Terraform lrsmith$ curl --insecure -H 'X-Session-Token:00000000' "https://34.228.78.132:8443/v1/fibseq?index=5"
 {"httpstatus":200,"sequence":[0,1,1,2,3],"errormsg":""}
