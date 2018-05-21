@@ -15,6 +15,12 @@
 			"revisionTime": "2018-05-17T17:36:23Z"
 		},
 		{
+			"checksumSHA1": "PWcIDB8ZSxAw60rvTUHN+RvuLqM=",
+			"path": "github.com/smira/go-statsd",
+			"revision": "12947546768177e144afe403e7992b4c8e5939ca",
+			"revisionTime": "2018-05-17T22:14:59Z"
+		},
+		{
 			"checksumSHA1": "2Cs00lF05dakzkHHkYWuedCf6nY=",
 			"path": "github.com/tkanos/gonfig",
 			"revision": "140e7c7ecea9170d71a841e208b86685c845eb53",
