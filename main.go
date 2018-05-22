@@ -34,11 +34,7 @@ func getConfigs() Configuration {
 	return configuration
 }
 
-func main() {
-
-	// Read in application configuration
-	log.Println("Reading configs")
-	appConfigs := getConfigs()
+func NewRouter(appConfigs Configuration) (arouter *mux.Router) {
 
 	// Initialze Authentication
 	amw := middleware.AuthenticationMiddleware{}
@@ -53,18 +49,30 @@ func main() {
 			statsd.MetricPrefix(appConfigs.StatsdPrefix))
 	}
 
-	// Setup URL router
-	router := mux.NewRouter().StrictSlash(true)
+	arouter = mux.NewRouter().StrictSlash(true)
 
-	router.HandleFunc("/status", handlers.Status)
-	router.HandleFunc("/v1/fibseq", handlers.FibSeq)
+	arouter.HandleFunc("/status", handlers.Status)
+	arouter.HandleFunc("/v1/fibseq", handlers.FibSeq)
 
 	// Enable middleware
-	router.Use(amw.AuthenticationMiddleware)
-	router.Use(middleware.LoggingMiddleware)
+	arouter.Use(amw.AuthenticationMiddleware)
+	arouter.Use(middleware.LoggingMiddleware)
 	if appConfigs.StatsdEnable {
-		router.Use(middleware.StatsdMiddleware)
+		arouter.Use(middleware.StatsdMiddleware)
 	}
+
+	return arouter
+
+}
+
+func main() {
+
+	// Read the app configs
+	log.Println("Reading configs")
+	appConfigs := getConfigs()
+
+	// Build handlers
+	router := NewRouter(appConfigs)
 
 	// Start service
 	log.Println("Starting golang-fibonacci")
